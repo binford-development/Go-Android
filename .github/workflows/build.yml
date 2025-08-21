@@ -1,2 +1,30 @@
-# Go-Android
+name: Build Go for Android
 
+on:
+  workflow_dispatch:
+    inputs:
+      go_version:
+        required: true
+        description: "Go version to build (e.g., go1.22.2)"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: sudo apt-get update && sudo apt-get install -y wget unzip clang
+
+      - name: Run build script
+        run: |
+          chmod +x scripts/build.sh
+          ./scripts/build.sh ${{ github.event.inputs.go_version }}
+
+      - name: Upload artifact
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: go-v${{ github.event.inputs.go_version }}-android-arm64
+          path: go/pkg
