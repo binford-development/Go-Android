@@ -1,1 +1,26 @@
-# Go-Android
+name: Check for Go Update
+
+on:
+  schedule:
+    - cron: '0 0 * * 0' # Every Sunday
+  workflow_dispatch:
+
+jobs:
+  check-go-version:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Get latest Go version
+        id: get_version
+        run: |
+          latest=$(curl -s https://go.dev/VERSION?m=text)
+          echo "latest=$latest" >> $GITHUB_OUTPUT
+
+      - name: Trigger build workflow
+        uses: benc-uk/workflow-dispatch@v1
+        with:
+          workflow: build.yml
+          inputs: |
+            go_version: ${{ steps.get_version.outputs.latest }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
