@@ -1,7 +1,16 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-GO_VERSION="${1:-1.22.2}"
+# Function to fetch latest Go version dynamically if no argument passed
+get_latest_go_version() {
+    curl -s https://go.dev/VERSION?m=text | sed 's/^go//'
+    
+}
+
+# Use first argument as GO_VERSION, or fetch latest if empty
+GO_VERSION="${1:-$(get_latest_go_version)}"
+echo "Using Go version: $GO_VERSION"
+
 NDK_VERSION="r28c"
 NDK_ZIP="android-ndk-${NDK_VERSION}-linux.zip"
 NDK_DIR="android-ndk-${NDK_VERSION}"
