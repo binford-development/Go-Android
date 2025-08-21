@@ -1,5 +1,5 @@
 # Go for Android (arm64)
-This repo automates the process of building Go for Android (arm64-v8a) devices using GitHub Actions. 
+This repo automates the process of building Go for Android (arm64-v8a) devices using GitHub Actions.   
 Support for cgo is included in this build.
 
 
@@ -13,7 +13,7 @@ Support for cgo is included in this build.
 
 ## Manual Build
 
-Builds of Go-Android can also be sstarted manually.
+Builds of Go-Android can also be sstarted manually.  
 To manually build a specific version of Go:
 
 1. Go to "Actions" > "Build Go for Android"
