@@ -1,1 +1,28 @@
-# Go-Android
+name: Release Go Android Build
+
+on:
+  workflow_run:
+    workflows: ["Build Go for Android"]
+    types:
+      - completed
+
+jobs:
+  release:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: go-v${{ github.event.workflow_run.head_branch }}-android-arm64
+          path: ./build
+
+      - name: Create release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.event.workflow_run.head_branch }}
+          name: Build for ${{ github.event.workflow_run.head_branch }}
+          body: |
+            Automated Go cross-compile for Android ARM64
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
